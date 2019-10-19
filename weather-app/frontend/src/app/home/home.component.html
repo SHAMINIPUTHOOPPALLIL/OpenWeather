@@ -1,0 +1,65 @@
+<form [formGroup]='locationForm'>    
+    <mat-form-field class="example-full-width">
+        <h4>Country:</h4>
+        <input matInput [matAutocomplete]="autocountry" formControlName='countryInput'>
+    </mat-form-field>
+    <mat-autocomplete #autocountry="matAutocomplete" (optionSelected)='getCities($event.option.value)' [displayWith]="displayFnCountry">
+        <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="50"></mat-spinner></mat-option>
+        <ng-container *ngIf="!isLoading">
+            <mat-option *ngFor="let country of filteredCountries" [value]="country">
+                <span>{{ country.name }}</span>            
+            </mat-option>
+        </ng-container>
+    </mat-autocomplete>
+    &nbsp;
+    <mat-form-field class="example-full-width">
+        <h4>Suburb:</h4>
+        <input [(ngModel)]="selectedOption" matInput [matAutocomplete]="autocity" formControlName='cityInput'>
+    </mat-form-field>
+    <mat-autocomplete #autocity="matAutocomplete" (optionSelected)='populate($event.option.value)' [displayWith]="displayFnCity">
+        <mat-option *ngIf="isLoading" class="is-loading"><mat-spinner diameter="50"></mat-spinner></mat-option>
+        <ng-container *ngIf="!isLoading">
+            <mat-option *ngFor="let city of filteredCities" [value]="city">
+                <span>{{ city.name }}</span>                
+            </mat-option>
+        </ng-container>
+    </mat-autocomplete>
+</form>
+<div>    
+    <h2>Weather Condition {{selectedCity}}</h2>
+</div>
+
+<div class="card-deck">
+    <div class="card">  
+        <div class="card-header"><h5 class="card-title">Current Condition</h5></div>      
+        <div class="card-body text-center">            
+            <span><img src='{{currentWeather?.imageUrl}}'></span>&nbsp;                       
+            <p class="card-text">{{currentWeather?.description}}</p>
+            <p class="card-text">{{currentWeather?.currentTemprature}}</p>
+            <p class="card-text">Wind Speed {{currentWeather?.windSpeed}}</p>
+            <p></p>
+            <p class="card-text"><small class="text-muted">Last updated {{lastSeenTime}}</small></p>
+        </div>
+    </div>
+    <div class="card">
+            <div class="card-header"><h5 class="card-title">Five Days Forecasting</h5></div> 
+            <div class="card-body text-center">            
+            <section id="right">
+                <div *ngFor="let forecastWeather of forecastWeathers">
+                    <span id="r1c1">{{forecastWeather?.dateMonth}}</span>
+                    <span><img id="r1c2" src='{{forecastWeather?.imageUrl}}'></span>&nbsp;
+                    <span id="r1c3">{{forecastWeather?.minTemprature}}&deg;</span>&nbsp;
+                    <span id="r1c4">{{forecastWeather?.maxTemprature}}&deg;</span>
+                </div>
+            </section>
+            <p class="card-text"><small class="text-muted">Last updated {{lastSeenTime}}</small></p>
+        </div>
+    </div> 
+    <div class="card">            
+        <div class="text-center">            
+            <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng" [usePanning]="true" [streetViewControl]="false" style="height: 380px">
+                <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+            </agm-map> 
+        </div>
+    </div>    
+</div>

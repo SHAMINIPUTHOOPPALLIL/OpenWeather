@@ -1,0 +1,22 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
+  <div class="navbar-header">
+    <a class="navbar-brand" href="#">Awesome Weather</a>
+  </div>
+  <div class="navbar-nav">
+      <a class="nav-item nav-link" routerLink="/">Home</a>
+      <a class="nav-item nav-link" routerLink="/profile">Profile</a>
+      <a class="nav-item nav-link pull-right" (click)="logout()">Logout</a>      
+  </div>  
+</nav>
+<div class="container">
+    <div class="row">
+        <img id="me" src="./assets/image/weatherLogo.png">  
+        <h1>Welcome {{currentUser?.firstName}}</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <alert></alert>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
